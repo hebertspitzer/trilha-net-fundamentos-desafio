@@ -1,3 +1,7 @@
+using System.Diagnostics.Contracts;
+using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
+
 namespace DesafioFundamentos.Models
 {
     public class Estacionamento
@@ -16,8 +20,16 @@ namespace DesafioFundamentos.Models
         {
             Console.WriteLine("Digite a placa do veículo para estacionar:");
             string placaDoVeiculo = Console.ReadLine();
-            veiculos.Add(placaDoVeiculo);
-            Console.WriteLine($"Veículo {placaDoVeiculo} adicionado com sucesso");
+            if(VerificarFormatoDaPlaca(placaDoVeiculo))
+            {
+                veiculos.Add(placaDoVeiculo);
+                Console.WriteLine($"Veículo {placaDoVeiculo} adicionado com sucesso");
+            } 
+            else
+            {
+                Console.WriteLine($"O formato da placa esta incorreto, inseria nos seguintes formatos (ABC-1234) ou (ABC1D23)");
+            }
+            
         }
 
         public void RemoverVeiculo()
@@ -57,6 +69,20 @@ namespace DesafioFundamentos.Models
             else
             {
                 Console.WriteLine("Não há veículos estacionados.");
+            }
+        }
+        
+        private bool VerificarFormatoDaPlaca(string placa){
+            string formatoPlacaAntigo = @"^[a-zA-Z]{3}-\d{4}$";
+            string formatoPlacaNova = @"^[a-zA-Z]{3}\d[a-zA-Z]\d{2}$";
+
+            if(Regex.IsMatch(placa, formatoPlacaAntigo) || Regex.IsMatch(placa, formatoPlacaNova))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
